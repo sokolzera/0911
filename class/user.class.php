@@ -29,7 +29,9 @@ class User {
         $preparedQuery->execute();
         $result = $preparedQuery->get_result();
         $row = $result->fetch_assoc();
-        if(password_verify($this->password, $row['password'])) {
+        if($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+        if(password_verify($this->password, $row['password'])) 
         $this->id = $row['id]'];
         $this->firstName = $row['firstName'];
         $this->lastName = $row['lastName'];
