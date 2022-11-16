@@ -10,7 +10,7 @@ class User {
     public function __construct(string $login, string $password)
     {
         $this->login = $login;
-        $this->password_hash = password_hash($password, PASSWORD_ARGON2I);
+        $this->password = $password;
         global $db;
         $this->db = &$db;
     }
@@ -23,23 +23,20 @@ class User {
 
     }
     public function login() {
-        $query = "SELECT * FROM user WHERE login = ?";
+        $query = "SELECT * FROM user WHERE login = ? LIMIT 1";
         $preparedQuery = $this->db->prepare($query);
-        $preparedQuery->bind_param('s' , $this->login);
+        $preparedQuery->bind_param('s', $this->login);
         $preparedQuery->execute();
         $result = $preparedQuery->get_result();
-        $row = $result->fetch_assoc();
         if($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-        if(password_verify($this->password, $row['password'])) 
-        $this->id = $row['id]'];
-        $this->firstName = $row['firstName'];
-        $this->lastName = $row['lastName'];
-        
+            if(password_verify($this->password, $row['password'])) {
+                $this->id = $row['id'];
+                $this->firstName = $row['firstName'];
+                $this->lastName = $row['lastName'];
+            }
         }
-    
-    
-
+        
     }
     public function logout() {
         
@@ -47,7 +44,7 @@ class User {
     public function register() {
         $query = "INSERT INTO user VALUES (NULL, ? , ? , ? , ?)";
         $preparedQuerry = $this->db->prepare($query);
-        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        $password_hash = password_hash($this->password, PASSWORD_ARGON2I);
         if(!isset($this->firstName))
             $this->firstName = "";
         if(!isset($this->lastName))
