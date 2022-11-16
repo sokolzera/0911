@@ -45,9 +45,10 @@ class User {
     public function register() {
         $query = "INSERT INTO user VALUES (NULL, ? , ? , ? , ?)";
         $preparedQuerry = $this->db->prepare($query);
+        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
         $preparedQuerry->bind_param('ssss' , $this->login , $password_hash,  $this->firstName , $this->lastName);
        
-        
+        $preparedQuerry->execute();
     }
 }
 ?>
