@@ -46,6 +46,10 @@ class User {
         $query = "INSERT INTO user VALUES (NULL, ? , ? , ? , ?)";
         $preparedQuerry = $this->db->prepare($query);
         $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        if(!isset($this->firstName))
+            $this->firstName = "";
+        if(!isset($this->lastName))
+            $this->lastName = "";
         $preparedQuerry->bind_param('ssss' , $this->login , $password_hash,  $this->firstName , $this->lastName);
        
         $preparedQuerry->execute();
