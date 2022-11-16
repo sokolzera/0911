@@ -25,14 +25,29 @@ class User {
     public function login() {
         $query = "SELECT * FROM user WHERE login = ?";
         $preparedQuery = $this->db->prepare($query);
+        $preparedQuery->bind_param('s' , $this->login);
+        $preparedQuery->execute();
+        $result = $preparedQuery->get_result();
+        $row = $result->fetch_assoc();
+        if(password_verify($this->password, $row['password'])) {
+        $this->id = $row['id]'];
+        $this->firstName = $row['firstName'];
+        $this->lastName = $row['lastName'];
+        
+        }
+    
     
 
     }
     public function logout() {
-        global $db;
+        
     }
     public function register() {
-        global $db;
+        $query = "INSERT INTO user VALUES (NULL, ? , ? , ? , ?)";
+        $preparedQuerry = $this->db->prepare($query);
+        $preparedQuerry->bind_param('ssss' , $this->login , $password_hash,  $this->firstName , $this->lastName);
+       
+        
     }
 }
 ?>
