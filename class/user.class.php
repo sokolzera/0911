@@ -53,5 +53,15 @@ class User {
        
         $preparedQuerry->execute();
     }
+    public function setFirstName(string $firstName) {
+        $this->firstName = $firstName;
+    }
+    public function setLastName(string $lastName) {
+        $this->lastName = $lastName;
+    }
+    public function getName() : string {
+        return $this->firstName . " " . $this->lastName;
+    }
+
 }
 ?>
