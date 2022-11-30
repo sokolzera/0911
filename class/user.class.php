@@ -42,16 +42,13 @@ class User {
         
     }
     public function register() {
-        $query = "INSERT INTO user VALUES (NULL, ? , ? , ? , ?)";
-        $preparedQuerry = $this->db->prepare($query);
-        $password_hash = password_hash($this->password, PASSWORD_ARGON2I);
-        if(!isset($this->firstName))
-            $this->firstName = "";
-        if(!isset($this->lastName))
-            $this->lastName = "";
-        $preparedQuerry->bind_param('ssss' , $this->login , $password_hash,  $this->firstName , $this->lastName);
-       
-        $preparedQuerry->execute();
+        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
+        $preparedQuery = $this->db->prepare($query); 
+        $preparedQuery->bind_param('ssss', $this->login, $passwordHash, 
+                                            $this->firstName, $this->lastName);
+        $result = $preparedQuery->execute();
+        return $result;
     }
     public function setFirstName(string $firstName) {
         $this->firstName = $firstName;
