@@ -17,7 +17,8 @@ Route::add('/login' , function() {
         
         $user = new User($_REQUEST['login'], $_REQUEST['password']);
         if($user->login()) {
-            //echo "Zalogowano poprawnie użytkownika: ".$user->getName();
+            $_SESSION['authorized'] = true ;
+        
             $v = array(
                 'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
             );
