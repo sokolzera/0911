@@ -86,5 +86,29 @@ Route::add('/logout', function() {
                                 ['message' => "Wylogowano poprawnie"]);
 });
 
+Route::add('/profile', function() {
+    global $twig;
+    $user = $_SESSION['user'];
+    //pobieramy imię i nazwisko rozdzielone spacją
+    $fullName = $user->getName();
+    $fullName = explode(" ", $fullName); // "Imię nazwisko" => array ("Imię", "Nazwisko");
+    $v = array( 'user'      => $user,
+                'firstName' => $fullName[0],
+                'lastName'  => $fullName[1],
+            );
+    $twig->display('profile.html.twig', $v);
+});
+Route::add('/profile', function() {
+    global $twig;
+    if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
+        $user = $_SESSION['user'];
+        $user->setFirstName($_REQUEST['firstName']);
+        $user->setLastName($_REQUEST['lastName']);
+        $user->save();
+        $twig->display('message.html.twig', 
+                                ['message' => "Zapisano zmiany w profilu"]);
+    }
+}, "post");
+
 Route::run('/loginform');
 ?>
