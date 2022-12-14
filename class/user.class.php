@@ -6,6 +6,8 @@ class User {
     private string $password;
     private string $firstName;
     private string $lastName;
+    private string $newPassword;
+
 
     public function __construct(string $login, string $password) {
         $this->login = $login;
@@ -76,11 +78,21 @@ class User {
     public function save() : bool {
         $q = "UPDATE user SET
                 firstName = ?,
-                lastName = ?
+                lastName = ?,
                 WHERE id = ?";
         $preparedQuery = $this->db->prepare($q);
-        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->id);
+        $preparedQuery->bind_param("si", $this->firstName, $this->lastName, $this->id);
         return $preparedQuery->execute();
     }
+    
+    public function changePassword(string $newPassword) : bool {
+        $this->password_hash = password_hash($newPassword, PASSWORD_ARGON2I);
+        $q = "UPDATE user SET
+                password = ?
+                WHERE id = ?";
+        $preparedQuery = $this->db->prepare($q);
+        $preparedQuery->bind_param("si", $this->firstName, $this->lastName, $this->id);
+        return $preparedQuery->execute();
+}
 }
 ?>
